@@ -1,8 +1,8 @@
 {
-    "name": "yiisoft/yii2-app-advanced",
-    "description": "Yii 2 Advanced Project Template",
-    "keywords": ["yii2", "framework", "advanced", "project template"],
-    "homepage": "http://www.yiiframework.com/",
+    "name": "wuuye.com",
+    "description": "物业家 - 大家的线上社区",
+    "keywords": ["物业", "社区", "便民", "超市"],
+    "homepage": "http://www.wuuye.com/",
     "type": "project",
     "license": "BSD-3-Clause",
     "support": {
@@ -28,7 +28,7 @@
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
-        "codeception/base": "^2.2.3",
+        "codeception/codeception": "^2.2.3",
         "codeception/verify": "~0.3.1"
     },
     "config": {
