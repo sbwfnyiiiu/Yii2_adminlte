@@ -120,9 +120,9 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success', '<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>  谢谢，您的讯息已收到！商讨后我们将立即给予反馈。');
             } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
+                Yii::$app->session->setFlash('error', '发送提示信息时错误！！');
             }
 
             return $this->refresh();
@@ -174,11 +174,11 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', '我们已发送密码重置链接到您的邮箱，请根据指示进一步操作。');
 
-                return $this->goHome();
+                // return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error', '抱歉, 出现错误或技术故障，请稍后重试或联系本站服务人员。');
             }
         }
 
@@ -203,9 +203,9 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+            Yii::$app->session->setFlash('success', '密码已更新成功,请登录.');
 
-            return $this->goHome();
+            return $this->actionLogin();
         }
 
         return $this->render('resetPassword', [

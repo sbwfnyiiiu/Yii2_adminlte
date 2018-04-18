@@ -25,10 +25,21 @@ class PasswordResetRequestForm extends Model
             ['email', 'exist',
                 'targetClass' => '\common\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'There is no user with this email address.'
+                'message' => '输入的电子邮箱与账号无匹配'
             ],
         ];
     }
+
+     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'email' => '电子邮件',
+        ];
+    }
+
 
     /**
      * Sends an email with a link, for resetting the password.
@@ -60,9 +71,9 @@ class PasswordResetRequestForm extends Model
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom(['noreply@wuuye.com' => Yii::$app->name])
             ->setTo($this->email)
-            ->setSubject('Password reset for ' . Yii::$app->name)
+            ->setSubject('用户账号密码重置(请勿回复)')
             ->send();
     }
 }

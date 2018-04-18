@@ -46,6 +46,22 @@ return [
             ],
         ],
         */
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' =>false,
+            'transport' => [ 
+                'class' => 'Swift_SmtpTransport', 
+                'host' => 'smtp.exmail.qq.com', 
+                'username' => 'noreply@wuuye.com', 
+                'password' => 'Licm19820926`', 
+                'port' => '25', 
+                'encryption' => 'tls', 
+            ], 
+            'messageConfig'=>[ 
+                'charset'=>'UTF-8', 
+                'from'=>['noreply@wuuye.com'=>'请勿回复'] 
+            ], 
+        ],
     ],
     'params' => $params,
 ];

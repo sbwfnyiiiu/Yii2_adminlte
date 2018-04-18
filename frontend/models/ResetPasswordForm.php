@@ -2,7 +2,7 @@
 namespace frontend\models;
 
 use yii\base\Model;
-use yii\base\InvalidParamException;
+use yii\base\UserException;
 use common\models\User;
 
 /**
@@ -28,11 +28,16 @@ class ResetPasswordForm extends Model
     public function __construct($token, $config = [])
     {
         if (empty($token) || !is_string($token)) {
-            throw new InvalidParamException('Password reset token cannot be blank.');
+            throw new InvalidParamException('重置密码令牌不能为空.');
         }
         $this->_user = User::findByPasswordResetToken($token);
         if (!$this->_user) {
-            throw new InvalidParamException('Wrong password reset token.');
+            throw new InvalidParamException('重置密码令牌错误.');
+        }
+        //判断$token的时效性1小时内有效
+        $oldtimestamp = substr($token,-10); //获取生成的时间戳
+        if(time()-$oldtimestamp > 900){
+            throw new UserException('重置密码令牌已过有效期.');
         }
         parent::__construct($config);
     }
@@ -47,6 +52,17 @@ class ResetPasswordForm extends Model
             ['password', 'string', 'min' => 6],
         ];
     }
+
+     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'password' => '新密码',
+        ];
+    }
+
 
     /**
      * Resets password.

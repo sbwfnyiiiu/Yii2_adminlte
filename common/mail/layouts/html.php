@@ -16,6 +16,7 @@ use yii\helpers\Html;
 <body>
     <?php $this->beginBody() ?>
     <?= $content ?>
+    <div class="footer">非常感谢您的支持<br> <?= Yii::$app->name ?><br><?= date('Y-m-d H:i:s') ?></div>
     <?php $this->endBody() ?>
 </body>
 </html>

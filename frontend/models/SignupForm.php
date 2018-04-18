@@ -12,7 +12,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
-
+    public $password_repeat;
 
     /**
      * {@inheritdoc}
@@ -22,19 +22,35 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '该用户名已被占用'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => '此电子邮箱已被占用'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+            ['password_repeat', 'required'],
+            ['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"确认密码与密码不一致"],
         ];
     }
+
+     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => '用户名',
+            'email' => '电子邮件',
+            'password' => '密码',
+            'password_repeat' => '确认密码',
+        ];
+    }
+
 
     /**
      * Signs user up.

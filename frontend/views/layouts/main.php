@@ -6,7 +6,6 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\bootstrap\Carousel;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
@@ -60,43 +59,18 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
-    <?php 
-    echo Carousel::widget([
-        'items' => [
-            [
-                'content' => '<img src="/images/14881853_xl.jpg"/>',
-                'caption' => '<h4>This is 14881853_xl.jpg</h4><p>This is the caption text</p>',
-                'options' => [
-                    'style' => 'height: 600px;',
-                ],
-            ],
-            [
-                'content' => '<img src="/images/53402047_xl.jpg"/>',
-                'caption' => '<h4>This is 53402047_xl.jpg</h4><p>This is the caption text</p>',
-                'options' => [
-                    'style' => 'height: 600px;',
-                ],
-            ],
-            [
-                'content' => '<img src="/images/photo-1475158574400-f135829cbda3.jpg"/>',
-                'caption' => '<h4>This is photo-1475158574400-f135829cbda3.jpg</h4><p>This is the caption text</p>',
-                'options' => [
-                    'style' => 'height: 600px;',
-                ],
-            ],
-        ],
-        'controls' => [
-            '<span class="glyphicon glyphicon-chevron-left"></span>', 
-            '<span class="glyphicon glyphicon-chevron-right"></span>'
-        ],
-        'options' => [
-        ],
-    ]);
-    ?>
+    <!-- 数据块显示逻辑开始 -->
+    <?php if (isset($this->blocks['block1'])): ?>
+        <?= $this->blocks['block1'] ?>
+    <?php else: ?>
+        
+    <?php endif; ?>
+    <!-- 数据块显示逻辑结束 -->
     <div class="container">
-        <?= Breadcrumbs::widget([
+        <!-- 注释面包屑导航 -->
+        <!-- <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+        ]) ?> -->
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
@@ -106,7 +80,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">版权所有 &copy; <?= date('Y') ?></p>
 
-        <p class="pull-right">技术支持 <a href="http://www.caicent.com" target="_blank">CAICENT TECHNOLOGY</a></p>
+        <p class="pull-right">技术支持 <a href="http://www.caicent.com" target="_blank">CAICENT技术有限公司</a></p>
     </div>
 </footer>
 

@@ -7,13 +7,13 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Reset password';
+$this->title = '密码重置';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-reset-password">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please choose your new password:</p>
+    <p>请牢记您的输入:</p>
 
     <div class="row">
         <div class="col-lg-5">
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'password')->passwordInput(['autofocus' => true]) ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton('更新密码', ['class' => 'btn btn-primary']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
