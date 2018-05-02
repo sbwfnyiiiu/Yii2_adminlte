@@ -6,6 +6,9 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\web\Link; // represents a link object as defined in JSON Hypermedia API Language.
+use yii\web\Linkable;
+use yii\helpers\Url;
 
 /**
  * User model
@@ -21,7 +24,7 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface,Linkable
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -69,7 +72,14 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        $identity = static::findOne(['access_token' => $token,'status' => self::STATUS_ACTIVE]);
+        $loginDuration = time() - substr($identity->access_token,-10); //获取登录持续时间差，一周内登录有效
+        if($loginDuration > 3600 * 24 * 7 ){
+            return null;
+        }else{
+            return $identity;
+        }
+        // throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
@@ -186,4 +196,29 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    //begin - For restapi
+    public function fields()
+    {
+        $fields = parent::fields();
+        unset($fields['auth_key'], $fields['password_hash'], $fields['password_reset_token']);
+        return $fields;
+    }
+
+    public function getLinks()
+    {
+        return [
+            Link::REL_SELF => Url::to(['user/view', 'id' => $this->id], true),
+            'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'profile' => Url::to(['user/profile/view', 'id' => $this->id], true),
+            'index' => Url::to(['users'], true),
+        ];
+    }
+
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString() . '_' . time();
+        return $this->access_token;
+    }
+    //end - For restapi
 }

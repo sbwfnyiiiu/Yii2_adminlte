@@ -80,7 +80,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">版权所有 &copy; <?= date('Y') ?></p>
 
-        <p class="pull-right">技术支持 <a href="http://www.caicent.com" target="_blank">CAICENT技术有限公司</a></p>
+        <p class="pull-right">技术支持 <a href="http://www.caicent.com" target="_blank">CAICENT</a></p>
     </div>
 </footer>
 
