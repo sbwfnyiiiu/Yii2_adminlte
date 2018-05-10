@@ -38,14 +38,12 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'useFileTransport' =>false,
@@ -54,8 +52,8 @@ return [
                 'host' => 'smtp.exmail.qq.com', 
                 'username' => 'noreply@wuuye.com', 
                 'password' => 'Licm19820926`', 
-                'port' => '25', 
-                'encryption' => 'tls', 
+                'port' => '465', 
+                'encryption' => 'ssl', 
             ], 
             'messageConfig'=>[ 
                 'charset'=>'UTF-8', 

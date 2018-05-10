@@ -153,6 +153,11 @@ class SiteController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
+                //注册成功提示信息
+                Yii::$app->session->setFlash('success', '账号注册成功，首先请您登陆邮箱根据提示激活您的账号后，方可登录。');
+                //发送邮件确认账号
+                
+                //登录邮箱激活账号
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
@@ -174,7 +179,7 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', '我们已发送密码重置链接到您的邮箱，请根据指示进一步操作。');
+                Yii::$app->session->setFlash('success', '我们已发送密码重置链接到您的邮箱，请根据指示在15分钟内完成操作。');
 
                 // return $this->goHome();
             } else {
@@ -205,7 +210,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', '密码已更新成功,请登录.');
 
-            return $this->actionLogin();
+            return $this->redirect('/site/login');
         }
 
         return $this->render('resetPassword', [

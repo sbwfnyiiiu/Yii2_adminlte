@@ -62,6 +62,7 @@ return [
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user', 'except' => ['delete', 'create', 'update'],],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'site', 'extraPatterns' => ['POST login' => 'login'],],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'wechat','extraPatterns' => ['GET valid' => 'valid'],]
             ],
         ],
     ],
