@@ -24,7 +24,9 @@
         "mootensai/yii2-enhanced-gii": "*",
         "kartik-v/yii2-mpdf": "*",
         "kartik-v/yii2-tree-manager": "dev-master",
-        "crazyfd/yii2-qiniu": "dev-master"
+        "crazyfd/yii2-qiniu": "dev-master",
+        "costa-rico/yii2-images": "dev-master",
+        "daixianceng/yii2-smser": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

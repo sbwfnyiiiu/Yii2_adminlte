@@ -55,8 +55,18 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, '用户名或密码错误.');
+            $status = $user->status;
+            switch ($status) {
+                case 99:
+                    Yii::$app->session->setFlash('warning', '该用户/帐号的注册邮箱未经认证,请检查注册邮箱邮件内的激活链接!');
+                    $this->addError('username', '未激活的帐号.');
+                    return;
+                    break;
+                case 0:
+                default:
+                    if (!$user || !$user->validatePassword($this->password)) {
+                        $this->addError($attribute, '用户名或密码错误.');
+                    }
             }
         }
     }
@@ -85,7 +95,6 @@ class LoginForm extends Model
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->username);
         }
-
         return $this->_user;
     }
 }

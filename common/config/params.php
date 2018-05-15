@@ -2,5 +2,5 @@
 return [
     'adminEmail' => 'support@wuuye.com',
     'supportEmail' => 'noreply@wuuye.com',
-    'user.passwordResetTokenExpire' => 3600,
+    'user.passwordResetTokenExpire' => 900,
 ];

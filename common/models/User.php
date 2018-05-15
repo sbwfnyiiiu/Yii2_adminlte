@@ -28,6 +28,7 @@ class User extends ActiveRecord implements IdentityInterface,Linkable
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_DEACTIVE = 99;
 
 
     /**
@@ -55,7 +56,7 @@ class User extends ActiveRecord implements IdentityInterface,Linkable
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED, self::STATUS_DEACTIVE]],
         ];
     }
 
@@ -90,7 +91,8 @@ class User extends ActiveRecord implements IdentityInterface,Linkable
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        // return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username]);
     }
 
     /**
@@ -195,6 +197,36 @@ class User extends ActiveRecord implements IdentityInterface,Linkable
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function removeActiveToken()
+    {
+        $this->active_token = null;
+    }
+
+    /**
+     * Generates active token
+     */
+    public function generateActiveToken()
+    {
+        $this->active_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Finds user by password active token
+     *
+     * @param string $token password active token
+     * @return static|null
+     */
+    public static function findByActiveAccountToken($token)
+    {
+        if (empty($token)) {
+            return null;
+        }
+
+        return static::findOne([
+            'active_token' => $token,
+        ]);
     }
 
     //begin - For restapi

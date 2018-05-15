@@ -9,5 +9,12 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'smser' => [
+            // 中国云信
+            'class' => 'daixianceng\smser\CloudSmser',
+            'username' => 'caicent',
+            'password' => 'licm1982',
+            'fileMode' => false
+        ]
     ],
 ];

@@ -3,16 +3,13 @@ namespace frontend\models;
 
 use yii\base\Model;
 use yii\base\UserException;
-use yii\base\InvalidParamException;
 use common\models\User;
 
 /**
- * Password reset form
+ * Active account form
  */
-class ResetPasswordForm extends Model
+class ActiveAccountForm extends Model
 {
-    public $password;
-
     /**
      * @var \common\models\User
      */
@@ -29,11 +26,11 @@ class ResetPasswordForm extends Model
     public function __construct($token, $config = [])
     {
         if (empty($token) || !is_string($token)) {
-            throw new InvalidParamException('重置密码令牌不能为空.');
+            throw new InvalidParamException('帐号激活令牌不能为空.');
         }
-        $this->_user = User::findByPasswordResetToken($token);
+        $this->_user = User::findByActiveAccountToken($token);
         if (!$this->_user) {
-            throw new InvalidParamException('重置密码令牌过期或错误.');
+            throw new InvalidParamException('帐号激活令牌错误.');
         }
         // //判断$token的时效性1小时内有效
         // $oldtimestamp = substr($token,-10); //获取生成的时间戳
@@ -43,39 +40,17 @@ class ResetPasswordForm extends Model
         parent::__construct($config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
-        ];
-    }
-
-     /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'password' => '新密码',
-        ];
-    }
-
 
     /**
      * Resets password.
      *
      * @return bool if password was reset.
      */
-    public function resetPassword()
+    public function activeAccount()
     {
         $user = $this->_user;
-        $user->setPassword($this->password);
-        $user->removePasswordResetToken();
-
+        $user->removeActiveToken();
+        $user->status=10;
         return $user->save(false);
     }
 }

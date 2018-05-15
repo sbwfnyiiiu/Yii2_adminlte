@@ -12,6 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\ActiveAccountForm;
 
 /**
  * Site controller
@@ -154,19 +155,52 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 //注册成功提示信息
-                Yii::$app->session->setFlash('success', '账号注册成功，首先请您登陆邮箱根据提示激活您的账号后，方可登录。');
+                Yii::$app->session->setFlash('info', '账号注册成功，请您登录注册时填写的邮箱,根据邮件提示激活您的账号后方可登录。');
                 //发送邮件确认账号
-                
+                $email = $user->email;
+                $sendActiveEmail = Yii::$app
+                ->mailer
+                ->compose(
+                    ['html' => 'accountActiveToken-html', 'text' => 'accountActiveToken-text'],
+                    ['user' => $user]
+                )
+                ->setFrom(['noreply@wuuye.com' => Yii::$app->name])
+                ->setTo($email)
+                ->setSubject('用户账号激活(请勿回复)')
+                ->send();
                 //登录邮箱激活账号
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                //跳转到登录界面
+                if(!$sendActiveEmail)
+                {
+                    Yii::$app->session->setFlash('error', '激活邮件发送失败!');
                 }
+                return $this->redirect('/site/login');
+                // if (Yii::$app->getUser()->login($user)) {
+                //     return $this->goHome();
+                // }
             }
         }
 
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionActiveAccount($token)
+    {
+        try {
+            $model = new ActiveAccountForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->activeAccount())
+        {
+            Yii::$app->session->setFlash('success', '您的帐号已经成功激活,请登录.');
+        }else{
+            Yii::$app->session->setFlash('error', '您的帐号激活失败,请联系管理员.');
+        }
+        return $this->redirect('/site/login');
     }
 
     /**
